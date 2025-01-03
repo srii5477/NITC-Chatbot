@@ -20,24 +20,38 @@ driver = webdriver.Chrome(options=options)
 driver.get(URL)
 
 
-titles = driver.find_elements(By.CLASS_NAME, 'xc-title')
-dates = driver.find_elements(By.CLASS_NAME, 'xc-date')
+# titles = driver.find_elements(By.CLASS_NAME, 'xc-title')
+# dates = driver.find_elements(By.CLASS_NAME, 'xc-date')
 
-title_text = []
-dates_text = []
+# title_text = []
+# dates_text = []
 
-for i in titles:
-    print(i.text)
-    title_text.append(i.text)
+# for i in titles:
+#     print(i.text)
+#     title_text.append(i.text)
     
-for i in dates:
-    print(i.text)
-    dates_text.append(i.text)
+# for i in dates:
+#     print(i.text)
+#     dates_text.append(i.text)
 
-data = list(zip(title_text, dates_text))
-with open("data.csv", "w", newline="", encoding="utf-8") as file:
+# data = list(zip(title_text, dates_text))
+# with open("news_events.csv", "w", newline="", encoding="utf-8") as file:
+#         writer = csv.writer(file)
+#         writer.writerow(["Title", "Date"]) 
+#         writer.writerows(data)  
+
+links = driver.find_elements(By.CLASS_NAME, 'xc-footer-links')
+departments = []
+for i in links:
+    print(i.text)
+    departments.append(i.text)
+
+departments = [item.replace(",", "") for item in departments]
+departments = [item.replace("\"", "") for item in departments]
+with open("depts.csv", "w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
-        writer.writerow(["Title", "Date"])  # Write the header
-        writer.writerows(data)  # Write the data rows
+        writer.writerow(["Title"])  
+        for item in departments:
+            writer.writerow([item])
 
 driver.quit()
