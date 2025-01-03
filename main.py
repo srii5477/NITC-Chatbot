@@ -6,6 +6,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.expected_conditions import visibility_of_element_located
 import time
 import csv
+import pandas
+import pdfplumber
 
 options = Options()
 options.headless = False  
@@ -92,24 +94,44 @@ driver.get(URL)
 #         writer.writerow(["Name", "Position"])  
 #         writer.writerows(faculty_data)
 
-contact = []
-content = []
-data = driver.find_elements(By.CLASS_NAME, "xc-department-content")
-for i in data:
-     print(i.text)
-     c = i.text
-     c = c.replace(",", "") 
-     content.append(c)
-#content = [item.replace(",", "") for item in content]
-data = driver.find_elements(By.CLASS_NAME, "xc-hostel-contact-box")
-for i in data:
-     print(i.text)
-     contact.append(i.text)
-print(contact)
-del contact[0]
-drata = list(zip(content, contact))
-with open("hostel.csv", "w", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file)
-        writer.writerow(["Info", "Contact"])  
-        writer.writerows(drata)
-driver.quit()
+# contact = []
+# content = []
+# data = driver.find_elements(By.CLASS_NAME, "xc-department-content")
+# for i in data:
+#      print(i.text)
+#      c = i.text
+#      c = c.replace(",", "") 
+#      content.append(c)
+# #content = [item.replace(",", "") for item in content]
+# data = driver.find_elements(By.CLASS_NAME, "xc-hostel-contact-box")
+# for i in data:
+#      print(i.text)
+#      contact.append(i.text)
+# print(contact)
+# del contact[0]
+# drata = list(zip(content, contact))
+# with open("hostel.csv", "w", newline="", encoding="utf-8") as file:
+#         writer = csv.writer(file)
+#         writer.writerow(["Info", "Contact"])  
+#         writer.writerows(drata)
+# driver.quit()
+
+with pdfplumber.open("academic-calendar.pdf") as pdf:
+    # Get the first page of the PDF
+    page = pdf.pages[0]
+    
+    # Extract the table(s) from the page
+    table = page.extract_table()
+
+# If the PDF contains tables, `table` will be a list of rows (list of lists)
+# Now, let's print the extracted table to see its structure
+for row in table:
+    print(row)
+    
+# Assuming you have extracted the 'table' list from the PDF
+with open('academic_calendar.csv', mode='w', newline='') as file:
+    writer = csv.writer(file)
+    
+    # Write the rows of the table to the CSV file
+    for row in table:
+        writer.writerow(row)
