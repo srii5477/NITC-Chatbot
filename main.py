@@ -12,7 +12,7 @@ options.headless = False
 options.add_argument("--window-size=1920,1200")
 
 # URL = "https://nitc.ac.in/news-and-events"  
-URL = "https://nitc.ac.in/department/electrical-engineering/faculty-and-staff/faculty"
+URL = "https://nitc.ac.in/hostels/overview"
 
 DRIVER_PATH = "C:\\Users\\sride\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe"
 
@@ -76,20 +76,40 @@ driver.get(URL)
 #     for item in eee_content:
 #         writer.writerow([item])
 
-faculty_names = []
-faculty_positions = []
-faculty = driver.find_elements(By.CLASS_NAME, "faculty-name")
-for i in faculty:
-    print(i.text)
-    faculty_names.append(i.text)
-faculty = driver.find_elements(By.CLASS_NAME, "faculty-position")
-for i in faculty:
-    print(i.text)
-    faculty_positions.append(i.text)
-faculty_data = list(zip(faculty_names, faculty_positions))
-with open("eee_faculty.csv", "w", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file)
-        writer.writerow(["Name", "Position"])  
-        writer.writerows(faculty_data)
+# faculty_names = []
+# faculty_positions = []
+# faculty = driver.find_elements(By.CLASS_NAME, "faculty-name")
+# for i in faculty:
+#     print(i.text)
+#     faculty_names.append(i.text)
+# faculty = driver.find_elements(By.CLASS_NAME, "faculty-position")
+# for i in faculty:
+#     print(i.text)
+#     faculty_positions.append(i.text)
+# faculty_data = list(zip(faculty_names, faculty_positions))
+# with open("eee_faculty.csv", "w", newline="", encoding="utf-8") as file:
+#         writer = csv.writer(file)
+#         writer.writerow(["Name", "Position"])  
+#         writer.writerows(faculty_data)
 
+contact = []
+content = []
+data = driver.find_elements(By.CLASS_NAME, "xc-department-content")
+for i in data:
+     print(i.text)
+     c = i.text
+     c = c.replace(",", "") 
+     content.append(c)
+#content = [item.replace(",", "") for item in content]
+data = driver.find_elements(By.CLASS_NAME, "xc-hostel-contact-box")
+for i in data:
+     print(i.text)
+     contact.append(i.text)
+print(contact)
+del contact[0]
+drata = list(zip(content, contact))
+with open("hostel.csv", "w", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        writer.writerow(["Info", "Contact"])  
+        writer.writerows(drata)
 driver.quit()
