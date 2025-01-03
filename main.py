@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.expected_conditions import visibility_of_element_located
 import time
+import csv
 
 options = Options()
 options.headless = False  
@@ -19,9 +20,24 @@ driver = webdriver.Chrome(options=options)
 driver.get(URL)
 
 
-content = driver.find_elements(By.TAG_NAME, 'a')
+titles = driver.find_elements(By.CLASS_NAME, 'xc-title')
+dates = driver.find_elements(By.CLASS_NAME, 'xc-date')
 
-for i in content:
+title_text = []
+dates_text = []
+
+for i in titles:
     print(i.text)
+    title_text.append(i.text)
+    
+for i in dates:
+    print(i.text)
+    dates_text.append(i.text)
+
+data = list(zip(title_text, dates_text))
+with open("data.csv", "w", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        writer.writerow(["Title", "Date"])  # Write the header
+        writer.writerows(data)  # Write the data rows
 
 driver.quit()
