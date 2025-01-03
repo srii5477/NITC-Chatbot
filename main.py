@@ -12,7 +12,7 @@ options.headless = False
 options.add_argument("--window-size=1920,1200")
 
 # URL = "https://nitc.ac.in/news-and-events"  
-URL = "https://nitc.ac.in/department/electrical-engineering"
+URL = "https://nitc.ac.in/department/electrical-engineering/faculty-and-staff/faculty"
 
 DRIVER_PATH = "C:\\Users\\sride\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe"
 
@@ -65,16 +65,31 @@ driver.get(URL)
 #     for item in cse_content:
 #         writer.writerow([item])
 
-eee = driver.find_elements(By.XPATH, "//div[@class='xc-department-content']//p")
-eee_content = []
-for i in eee:
-    print(i.text)
-    eee_content.append(i.text)
-with open("eee.csv", "w", newline="", encoding="utf-8") as file:
-    writer = csv.writer(file)
-    writer.writerow(["Description of the EEE Department"])  
-    for item in eee_content:
-        writer.writerow([item])
+# eee = driver.find_elements(By.XPATH, "//div[@class='xc-department-content']//p")
+# eee_content = []
+# for i in eee:
+#     print(i.text)
+#     eee_content.append(i.text)
+# with open("eee.csv", "w", newline="", encoding="utf-8") as file:
+#     writer = csv.writer(file)
+#     writer.writerow(["Description of the EEE Department"])  
+#     for item in eee_content:
+#         writer.writerow([item])
 
+faculty_names = []
+faculty_positions = []
+faculty = driver.find_elements(By.CLASS_NAME, "faculty-name")
+for i in faculty:
+    print(i.text)
+    faculty_names.append(i.text)
+faculty = driver.find_elements(By.CLASS_NAME, "faculty-position")
+for i in faculty:
+    print(i.text)
+    faculty_positions.append(i.text)
+faculty_data = list(zip(faculty_names, faculty_positions))
+with open("eee_faculty.csv", "w", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        writer.writerow(["Name", "Position"])  
+        writer.writerows(faculty_data)
 
 driver.quit()
