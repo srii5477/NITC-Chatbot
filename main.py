@@ -12,7 +12,7 @@ options.headless = False
 options.add_argument("--window-size=1920,1200")
 
 # URL = "https://nitc.ac.in/news-and-events"  
-URL = "https://nitc.ac.in/department/electronics-amp-communication-engineering"
+URL = "https://nitc.ac.in/department/electrical-engineering"
 
 DRIVER_PATH = "C:\\Users\\sride\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe"
 
@@ -64,14 +64,17 @@ driver.get(URL)
 #     writer.writerow(["Description of the CSE Department"])  
 #     for item in cse_content:
 #         writer.writerow([item])
-ece = driver.find_elements(By.XPATH, "//div[@class='xc-department-content']//p")
-ece_content = []
-for i in ece:
+
+eee = driver.find_elements(By.XPATH, "//div[@class='xc-department-content']//p")
+eee_content = []
+for i in eee:
     print(i.text)
-    ece_content.append(i.text)
-with open("ece.csv", "w", newline="", encoding="utf-8") as file:
+    eee_content.append(i.text)
+with open("eee.csv", "w", newline="", encoding="utf-8") as file:
     writer = csv.writer(file)
-    writer.writerow(["Description of the ECE Department"])  
-    for item in ece_content:
+    writer.writerow(["Description of the EEE Department"])  
+    for item in eee_content:
         writer.writerow([item])
+
+
 driver.quit()
