@@ -1,0 +1,93 @@
+import csv
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+
+"""import csv
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+
+options = Options()
+options.add_argument("--window-size=1920,1200")
+
+URL = "https://nitc.ac.in/multidiscilplinary-centres/centre-for-career-development"
+DRIVER_PATH = "/home/afkeen15/Downloads/chromedriver-linux64/chromedriver"
+
+# Initialize WebDriver with Service object
+service = Service(DRIVER_PATH)
+driver = webdriver.Chrome(service=service, options=options)
+
+# Open the URL
+driver.get(URL)
+
+# Extract all <p> elements under the specified div
+content_div = driver.find_element(By.CLASS_NAME, "xc-department-content")
+paragraphs = content_div.find_elements(By.TAG_NAME, "p")
+
+# Collect the text from each paragraph
+all_paragraphs_text = [p.text.strip() for p in paragraphs if p.text.strip()]
+
+# Extract the "Visit Website" link
+website_link = content_div.find_element(By.CLASS_NAME, "xc-link-1").get_attribute("href")
+all_paragraphs_text.append(f"Visit Website: {website_link}")
+
+# Write paragraphs and website link to a CSV file
+csv_file_path = "ccd_intro.csv"  # Change to your desired path
+with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
+    csvwriter = csv.writer(csvfile)
+    csvwriter.writerow(["Content"])  # Write header
+    for paragraph in all_paragraphs_text:
+        csvwriter.writerow([paragraph])
+
+print(f"Extracted paragraphs and website link have been written to {csv_file_path}")
+
+driver.quit()"""
+
+# Setup Chrome options
+options = Options()
+options.add_argument("--window-size=1920,1200")
+
+URL = "https://minerva.nitc.ac.in/?q=academics/placements-internships/placements"
+DRIVER_PATH = "/home/afkeen15/Downloads/chromedriver-linux64/chromedriver"
+
+# Initialize WebDriver with Service object
+service = Service(DRIVER_PATH)
+driver = webdriver.Chrome(service=service, options=options)
+
+# Open the URL
+driver.get(URL)
+
+# Find all tables for the placement data
+tables = driver.find_elements(By.TAG_NAME, "table")
+
+# Open CSV file for writing
+with open("placement_data.csv", mode='w', newline='', encoding="utf-8") as file:
+    writer = csv.writer(file)
+
+    # Write the header row
+    writer.writerow(["Academic Year", "Placement Percentage", "Average Salary (Lakhs)"])
+
+    # Loop through all tables
+    for table in tables:
+        rows = table.find_elements(By.TAG_NAME, "tr")
+
+        # Loop through rows in the table
+        for row in rows[1:]:  # Skip the header row
+            columns = row.find_elements(By.TAG_NAME, "td")
+
+            # If there are at least 3 columns in a row
+            if len(columns) >= 3:
+                academic_year = columns[0].text.strip()
+                placement_percentage = columns[1].text.strip()
+                avg_salary = columns[2].text.strip()
+
+                # Write row to CSV
+                writer.writerow([academic_year, placement_percentage, avg_salary])
+
+# Close the WebDriver
+driver.quit()
+
+print("Placement data has been written to placement_data.csv")
